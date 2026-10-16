@@ -5,38 +5,94 @@ public class Main {
         RentalManager manager = new RentalManager();
         Scanner scanner = new Scanner(System.in);
 
-        // Data Awal
+        // Data dummy: 5 motor, 5 mobil, 5 pelanggan, dan 5 transaksi.
         try {
+            // Motor
             manager.tambahKendaraan(new Motor("DD 1234 XY", "Honda Vario 160", 85000, 160, "Matic"));
+            manager.tambahKendaraan(new Motor("DD 2345 AB", "Yamaha NMAX", 100000, 155, "Matic"));
+            manager.tambahKendaraan(new Motor("DD 3456 BC", "Honda Beat", 65000, 110, "Matic"));
+            manager.tambahKendaraan(new Motor("DD 4567 CD", "Honda Supra X", 70000, 125, "Manual"));
+            manager.tambahKendaraan(new Motor("DD 5678 DE", "Kawasaki KLX", 120000, 150, "Manual"));
+
+            // Mobil
             manager.tambahKendaraan(new Mobil("DD 8899 ZZ", "Toyota Avanza", 350000, 7, "Manual"));
+            manager.tambahKendaraan(new Mobil("DD 9900 AA", "Daihatsu Xenia", 325000, 7, "Manual"));
+            manager.tambahKendaraan(new Mobil("DD 1100 BB", "Honda Brio", 300000, 5, "Matic"));
+            manager.tambahKendaraan(new Mobil("DD 2200 CC", "Suzuki Ertiga", 375000, 7, "Manual"));
+            manager.tambahKendaraan(new Mobil("DD 3300 DD", "Toyota Innova", 500000, 7, "Matic"));
+
+            // Pelanggan
             manager.tambahPelanggan(new Pelanggan("PLG-01", "Budi Santoso", "081234567890"));
-        } catch (Exception ignored) {}
+            manager.tambahPelanggan(new Pelanggan("PLG-02", "Siti Rahma", "081200000002"));
+            manager.tambahPelanggan(new Pelanggan("PLG-03", "Andi Pratama", "081200000003"));
+            manager.tambahPelanggan(new Pelanggan("PLG-04", "Dewi Lestari", "081200000004"));
+            manager.tambahPelanggan(new Pelanggan("PLG-05", "Rizky Saputra", "081200000005"));
+
+            // Tiga transaksi aktif dan dua transaksi selesai.
+            manager.buatTransaksi("TRX-01", "PLG-01", "DD 1234 XY", 3);
+            manager.buatTransaksi("TRX-02", "PLG-02", "DD 8899 ZZ", 2);
+            manager.buatTransaksi("TRX-03", "PLG-03", "DD 2345 AB", 4);
+            manager.buatTransaksi("TRX-04", "PLG-04", "DD 9900 AA", 1);
+            manager.prosesPengembalian("TRX-04");
+            manager.buatTransaksi("TRX-05", "PLG-05", "DD 3456 BC", 2);
+            manager.prosesPengembalian("TRX-05");
+        } catch (Exception e) {
+            System.out.println("Gagal memuat data dummy: " + e.getMessage());
+        }
 
         int pilihan = 0;
         do {
             System.out.println("\n==================================================");
-            System.out.println("       APLIKASI RENTAL MOTOR DAN MOBIL            ");
             System.out.println("                 RENTAL BORMMM                    ");
             System.out.println("         Jl. Sungai Saddang Baru Makassar         ");
             System.out.println("==================================================");
-            System.out.println("1. Tambah Kendaraan (Motor/Mobil)");
-            System.out.println("2. Edit Kendaraan (Merk, Tarif, dan Spesifikasi)");
-            System.out.println("3. Tampilkan Seluruh Kendaraan (Polymorphism)");
-            System.out.println("4. Tambah Pelanggan");
-            System.out.println("5. Tampilkan Daftar Pelanggan");
-            System.out.println("6. Buat Transaksi Penyewaan");
-            System.out.println("7. Proses Pengembalian Kendaraan");
-            System.out.println("8. Tampilkan Ringkasan Transaksi");
-            System.out.println("9. Edit Pelanggan (Nama dan No. HP)");
-            System.out.println("10. Hapus Kendaraan");
-            System.out.println("11. Hapus Pelanggan");
-            System.out.println("12. Edit Lama Sewa Transaksi Aktif");
-            System.out.println("13. Hapus Transaksi Selesai");
-            System.out.println("14. Keluar");
-            System.out.print("Pilih menu (1-14): ");
+            System.out.println("1. Kelola Kendaraan");
+            System.out.println("2. Kelola Pelanggan");
+            System.out.println("3. Kelola Transaksi");
+            System.out.println("4. Keluar");
+            System.out.print("Pilih menu (1-4): ");
 
             try {
                 pilihan = Integer.parseInt(scanner.nextLine());
+                switch (pilihan) {
+                    case 1:
+                        menuKendaraan(manager, scanner);
+                        break;
+
+                    case 2:
+                        menuPelanggan(manager, scanner);
+                        break;
+
+                    case 3:
+                        menuTransaksi(manager, scanner);
+                        break;
+
+                    case 4:
+                        System.out.println("Terima kasih telah menggunakan sistem Rental Bormmm!");
+                        break;
+
+                    default:
+                        System.out.println("Pilihan tidak valid!");
+                }
+            } catch (Exception e) {
+                System.out.println("TERJADI KESALAHAN: " + e.getMessage());
+            }
+        } while (pilihan != 4);
+        scanner.close();
+    }
+
+    private static void menuKendaraan(RentalManager manager, Scanner scanner) {
+        while (true) {
+            System.out.println("\n--- KELOLA KENDARAAN ---");
+            System.out.println("1. Tambah Kendaraan");
+            System.out.println("2. Tampilkan Daftar Kendaraan");
+            System.out.println("3. Edit Kendaraan");
+            System.out.println("4. Hapus Kendaraan");
+            System.out.println("0. Kembali ke Menu Utama");
+            System.out.print("Pilih menu (0-4): ");
+
+            try {
+                int pilihan = Integer.parseInt(scanner.nextLine());
                 switch (pilihan) {
                     case 1:
                         System.out.print("Pilih Jenis (1. Motor, 2. Mobil): ");
@@ -65,6 +121,13 @@ public class Main {
                         break;
 
                     case 2:
+                        System.out.println("\n--- DAFTAR KENDARAAN (Polymorphism) ---");
+                        for (Kendaraan item : manager.getDaftarKendaraan()) {
+                            System.out.println(item.tampilkanInfo());
+                        }
+                        break;
+
+                    case 3:
                         System.out.print("Masukkan Nomor Plat Kendaraan: ");
                         String pPlat = scanner.nextLine();
                         Kendaraan k = manager.cariKendaraan(pPlat);
@@ -89,14 +152,45 @@ public class Main {
                         System.out.println(">> Data kendaraan berhasil diperbarui!");
                         break;
 
-                    case 3:
-                        System.out.println("\n--- DAFTAR KENDARAAN (Polymorphism) ---");
-                        for (Kendaraan item : manager.getDaftarKendaraan()) {
-                            System.out.println(item.tampilkanInfo());
+                    case 4:
+                        System.out.print("Nomor Plat Kendaraan yang akan dihapus: ");
+                        String platHapus = scanner.nextLine();
+                        manager.cariKendaraan(platHapus);
+                        System.out.print("Yakin ingin menghapus kendaraan? (y/n): ");
+                        if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
+                            manager.hapusKendaraan(platHapus);
+                            System.out.println(">> Kendaraan berhasil dihapus!");
+                        } else {
+                            System.out.println(">> Penghapusan dibatalkan.");
                         }
                         break;
 
-                    case 4:
+                    case 0:
+                        return;
+
+                    default:
+                        System.out.println("Pilihan tidak valid!");
+                }
+            } catch (Exception e) {
+                System.out.println("TERJADI KESALAHAN: " + e.getMessage());
+            }
+        }
+    }
+
+    private static void menuPelanggan(RentalManager manager, Scanner scanner) {
+        while (true) {
+            System.out.println("\n--- KELOLA PELANGGAN ---");
+            System.out.println("1. Tambah Pelanggan");
+            System.out.println("2. Tampilkan Daftar Pelanggan");
+            System.out.println("3. Edit Pelanggan");
+            System.out.println("4. Hapus Pelanggan");
+            System.out.println("0. Kembali ke Menu Utama");
+            System.out.print("Pilih menu (0-4): ");
+
+            try {
+                int pilihan = Integer.parseInt(scanner.nextLine());
+                switch (pilihan) {
+                    case 1:
                         System.out.print("ID Pelanggan: ");
                         String idP = scanner.nextLine();
                         System.out.print("Nama: ");
@@ -107,14 +201,66 @@ public class Main {
                         System.out.println(">> Pelanggan berhasil ditambahkan!");
                         break;
 
-                    case 5:
+                    case 2:
                         System.out.println("\n--- DAFTAR PELANGGAN ---");
                         for (Pelanggan plg : manager.getDaftarPelanggan()) {
                             System.out.println(plg.tampilkanData());
                         }
                         break;
 
-                    case 6:
+                    case 3:
+                        System.out.print("Masukkan ID Pelanggan: ");
+                        String idEditPelanggan = scanner.nextLine();
+                        Pelanggan pelangganEdit = manager.cariPelanggan(idEditPelanggan);
+                        System.out.println("Data saat ini: " + pelangganEdit.tampilkanData());
+                        System.out.print("Nama Baru: ");
+                        String namaBaru = scanner.nextLine();
+                        System.out.print("No. HP Baru: ");
+                        String hpBaru = scanner.nextLine();
+                        pelangganEdit.ubahData(namaBaru, hpBaru);
+                        System.out.println(">> Data pelanggan berhasil diperbarui!");
+                        break;
+
+                    case 4:
+                        System.out.print("ID Pelanggan yang akan dihapus: ");
+                        String pelangganHapus = scanner.nextLine();
+                        manager.cariPelanggan(pelangganHapus);
+                        System.out.print("Yakin ingin menghapus pelanggan? (y/n): ");
+                        if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
+                            manager.hapusPelanggan(pelangganHapus);
+                            System.out.println(">> Pelanggan berhasil dihapus!");
+                        } else {
+                            System.out.println(">> Penghapusan dibatalkan.");
+                        }
+                        break;
+
+                    case 0:
+                        return;
+
+                    default:
+                        System.out.println("Pilihan tidak valid!");
+                }
+            } catch (Exception e) {
+                System.out.println("TERJADI KESALAHAN: " + e.getMessage());
+            }
+        }
+    }
+
+    private static void menuTransaksi(RentalManager manager, Scanner scanner) {
+        while (true) {
+            System.out.println("\n--- KELOLA TRANSAKSI ---");
+            System.out.println("1. Buat Penyewaan");
+            System.out.println("2. Tampilkan Daftar Transaksi");
+            System.out.println("3. Edit Lama Sewa");
+            System.out.println("4. Proses Pengembalian");
+            System.out.println("5. Hapus Transaksi Selesai");
+            System.out.println("0. Kembali ke Menu Utama");
+            System.out.print("Pilih menu (0-5): ");
+
+            try {
+                int pilihan = Integer.parseInt(scanner.nextLine());
+                switch (pilihan) {
+                    case 1:
                         System.out.print("ID Transaksi: ");
                         String idTrx = scanner.nextLine();
                         
@@ -141,60 +287,14 @@ public class Main {
                         System.out.println(">> Transaksi berhasil dibuat!");
                         break;
 
-                    case 7:
-                        System.out.print("Masukkan ID Transaksi yang ingin dikembalikan: ");
-                        String trsKembali = scanner.nextLine();
-                        manager.prosesPengembalian(trsKembali);
-                        System.out.println(">> Pengembalian berhasil diproses. Kendaraan kembali tersedia.");
-                        break;
-
-                    case 8:
+                    case 2:
                         System.out.println("\n--- RINGKASAN TRANSAKSI ---");
                         for (TransaksiRental trs : manager.getDaftarTransaksi()) {
                             System.out.println(trs.cetakTransaksi());
                         }
                         break;
 
-                    case 9:
-                        System.out.print("Masukkan ID Pelanggan: ");
-                        String idEditPelanggan = scanner.nextLine();
-                        Pelanggan pelangganEdit = manager.cariPelanggan(idEditPelanggan);
-                        System.out.println("Data saat ini: " + pelangganEdit.tampilkanData());
-                        System.out.print("Nama Baru: ");
-                        String namaBaru = scanner.nextLine();
-                        System.out.print("No. HP Baru: ");
-                        String hpBaru = scanner.nextLine();
-                        pelangganEdit.ubahData(namaBaru, hpBaru);
-                        System.out.println(">> Data pelanggan berhasil diperbarui!");
-                        break;
-
-                    case 10:
-                        System.out.print("Nomor Plat Kendaraan yang akan dihapus: ");
-                        String platHapus = scanner.nextLine();
-                        manager.cariKendaraan(platHapus);
-                        System.out.print("Yakin ingin menghapus kendaraan? (y/n): ");
-                        if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
-                            manager.hapusKendaraan(platHapus);
-                            System.out.println(">> Kendaraan berhasil dihapus!");
-                        } else {
-                            System.out.println(">> Penghapusan dibatalkan.");
-                        }
-                        break;
-
-                    case 11:
-                        System.out.print("ID Pelanggan yang akan dihapus: ");
-                        String pelangganHapus = scanner.nextLine();
-                        manager.cariPelanggan(pelangganHapus);
-                        System.out.print("Yakin ingin menghapus pelanggan? (y/n): ");
-                        if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
-                            manager.hapusPelanggan(pelangganHapus);
-                            System.out.println(">> Pelanggan berhasil dihapus!");
-                        } else {
-                            System.out.println(">> Penghapusan dibatalkan.");
-                        }
-                        break;
-
-                    case 12:
+                    case 3:
                         System.out.print("ID Transaksi yang akan diedit: ");
                         String idEditTransaksi = scanner.nextLine();
                         TransaksiRental transaksiEdit = manager.cariTransaksi(idEditTransaksi);
@@ -205,7 +305,14 @@ public class Main {
                         System.out.println(">> Lama sewa berhasil diperbarui. Total: Rp" + transaksiEdit.hitungTotal());
                         break;
 
-                    case 13:
+                    case 4:
+                        System.out.print("Masukkan ID Transaksi yang ingin dikembalikan: ");
+                        String trsKembali = scanner.nextLine();
+                        manager.prosesPengembalian(trsKembali);
+                        System.out.println(">> Pengembalian berhasil diproses. Kendaraan kembali tersedia.");
+                        break;
+
+                    case 5:
                         System.out.print("ID Transaksi yang akan dihapus: ");
                         String transaksiHapus = scanner.nextLine();
                         manager.cariTransaksi(transaksiHapus);
@@ -218,9 +325,8 @@ public class Main {
                         }
                         break;
 
-                    case 14:
-                        System.out.println("Terima kasih telah menggunakan sistem Rental Bormmm!");
-                        break;
+                    case 0:
+                        return;
 
                     default:
                         System.out.println("Pilihan tidak valid!");
@@ -228,7 +334,6 @@ public class Main {
             } catch (Exception e) {
                 System.out.println("TERJADI KESALAHAN: " + e.getMessage());
             }
-        } while (pilihan != 14);
-        scanner.close();
+        }
     }
 }

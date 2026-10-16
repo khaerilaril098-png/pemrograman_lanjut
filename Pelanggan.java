@@ -23,6 +23,14 @@ public class Pelanggan {
         this.noHP = noHPBaru.trim();
     }
 
+    public void ubahData(String nama, String noHP) {
+        if (nama == null || nama.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nama pelanggan wajib diisi.");
+        }
+        ubahKontak(noHP);
+        this.nama = nama.trim();
+    }
+
     public String tampilkanData() {
         return "ID: " + idPelanggan + " | Nama: " + nama + " | No. HP: " + noHP;
     }

@@ -29,6 +29,17 @@ public abstract class Kendaraan {
         this.tarifPerHari = tarif;
     }
 
+    public void ubahData(String merk, long tarifPerHari) {
+        if (merk == null || merk.trim().isEmpty()) {
+            throw new IllegalArgumentException("Merk wajib diisi.");
+        }
+        if (tarifPerHari <= 0) {
+            throw new IllegalArgumentException("Tarif per hari harus lebih dari nol.");
+        }
+        this.merk = merk.trim();
+        this.tarifPerHari = tarifPerHari;
+    }
+
     public void tandaiDisewa() { this.tersedia = false; }
     public void tandaiTersedia() { this.tersedia = true; }
 

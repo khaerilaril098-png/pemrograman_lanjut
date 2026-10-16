@@ -33,6 +33,16 @@ public class TransaksiRental {
         this.status = "AKTIF";
     }
 
+    public void ubahLamaSewa(int lamaSewa) {
+        if (!"AKTIF".equals(this.status)) {
+            throw new IllegalStateException("Hanya transaksi aktif yang dapat diedit.");
+        }
+        if (lamaSewa <= 0) {
+            throw new IllegalArgumentException("Lama sewa harus lebih dari 0 hari.");
+        }
+        this.lamaSewa = lamaSewa;
+    }
+
     public long hitungTotal() {
         return tarifSaatSewa * lamaSewa;
     }

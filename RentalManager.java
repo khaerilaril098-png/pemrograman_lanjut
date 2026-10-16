@@ -64,6 +64,46 @@ public class RentalManager {
         throw new IllegalArgumentException("Pelanggan tidak ditemukan.");
     }
 
+    public void hapusKendaraan(String noPlat) {
+        Kendaraan kendaraan = cariKendaraan(noPlat);
+        if (!kendaraan.isTersedia()) {
+            throw new IllegalStateException("Kendaraan sedang disewa dan tidak dapat dihapus.");
+        }
+        for (TransaksiRental transaksi : daftarTransaksi) {
+            if (transaksi.getKendaraan() == kendaraan) {
+                throw new IllegalStateException("Kendaraan masih tercatat dalam transaksi. Hapus transaksi selesai terkait terlebih dahulu.");
+            }
+        }
+        daftarKendaraan.remove(kendaraan);
+    }
+
+    public void hapusPelanggan(String idPelanggan) {
+        Pelanggan pelanggan = cariPelanggan(idPelanggan);
+        for (TransaksiRental transaksi : daftarTransaksi) {
+            if (transaksi.getPelanggan() == pelanggan) {
+                throw new IllegalStateException("Pelanggan masih tercatat dalam transaksi. Selesaikan dan hapus transaksi terkait terlebih dahulu.");
+            }
+        }
+        daftarPelanggan.remove(pelanggan);
+    }
+
+    public TransaksiRental cariTransaksi(String idTransaksi) {
+        for (TransaksiRental transaksi : daftarTransaksi) {
+            if (transaksi.getIdTransaksi().equalsIgnoreCase(idTransaksi)) {
+                return transaksi;
+            }
+        }
+        throw new IllegalArgumentException("Transaksi tidak ditemukan.");
+    }
+
+    public void hapusTransaksi(String idTransaksi) {
+        TransaksiRental transaksi = cariTransaksi(idTransaksi);
+        if (!"SELESAI".equals(transaksi.getStatus())) {
+            throw new IllegalStateException("Transaksi aktif tidak dapat dihapus. Proses pengembalian terlebih dahulu.");
+        }
+        daftarTransaksi.remove(transaksi);
+    }
+
     public List<Kendaraan> getDaftarKendaraan() { return daftarKendaraan; }
     public List<Pelanggan> getDaftarPelanggan() { return daftarPelanggan; }
     public List<TransaksiRental> getDaftarTransaksi() { return daftarTransaksi; }

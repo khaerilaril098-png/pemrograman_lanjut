@@ -11,6 +11,18 @@ public class Motor extends Kendaraan {
         this.jenisTransmisi = jenisTransmisi;
     }
 
+    public void ubahData(String merk, long tarifPerHari, int kapasitasMesin, String jenisTransmisi) {
+        if (kapasitasMesin <= 0) {
+            throw new IllegalArgumentException("Kapasitas mesin harus lebih dari nol.");
+        }
+        if (jenisTransmisi == null || jenisTransmisi.trim().isEmpty()) {
+            throw new IllegalArgumentException("Transmisi wajib diisi.");
+        }
+        super.ubahData(merk, tarifPerHari);
+        this.kapasitasMesin = kapasitasMesin;
+        this.jenisTransmisi = jenisTransmisi.trim();
+    }
+
     @Override
     public String getJenis() { return "Motor"; }
 
@@ -21,8 +33,6 @@ public class Motor extends Kendaraan {
 
     @Override
     public String tampilkanInfo() {
-        return "[MOTOR] Plat: " + getNoPlat() + " | Merk: " + getMerk() + 
-               " | Spesifikasi: " + getDetailKhusus() + " | Tarif: Rp" + getTarifPerHari() + 
-               "/hari | Status: " + (isTersedia() ? "Tersedia" : "Sedang Disewa");
+        return "[MOTOR] Plat: " + getNoPlat() + " | Merk: " + getMerk() +  " | Spesifikasi: " + getDetailKhusus() + " | Tarif: Rp" + getTarifPerHari() + "/hari | Status: " + (isTersedia() ? "Tersedia" : "Sedang Disewa");
     }
 }
